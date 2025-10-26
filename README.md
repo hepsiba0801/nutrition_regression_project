@@ -1,186 +1,422 @@
-# Nutrition Regression Model
+# 🍛 Indian Food Nutrition Predictor
 
-A Linear Regression model to predict nutritional quality scores for dishes based on their nutritional values.
+A professional Linear Regression ML model + interactive web UI for predicting nutritional quality scores and finding similar dishes in the Indian cuisine dataset.
 
-## 📊 Overview
+---
 
-This project trains a Linear Regression model using:
-- **Dataset**: Indian Food Nutrition (1,014 dishes)
-- **Features**: Calories, Protein, Carbohydrates, Sugar
-- **Target**: Nutritional Quality Score (0-100)
+## 📋 Table of Contents
 
-## 🎯 Scoring System
+- [Overview](#overview)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Model Performance](#model-performance)
+- [API Documentation](#api-documentation)
+- [Deployment](#deployment)
 
-The nutritional score is calculated based on:
-- **Protein (35%)**: Higher is better (scale: 0-20g)
-- **Calories (25%)**: Lower is better (scale: 0-500 kcal)
-- **Carbohydrates (25%)**: Optimal 30-50g range
-- **Sugar (15%)**: Lower is better (scale: 0-15g)
+---
 
-Score ranges:
-- **80-100**: Excellent 🌟
-- **70-79**: Very Good ✅
-- **60-69**: Good 👍
-- **50-59**: Fair ⚖️
-- **40-49**: Poor ⚠️
-- **0-39**: Very Poor ❌
+## 🎯 Overview
 
-## 🚀 Quick Start
+This project combines **machine learning** with a **modern web UI** to predict nutritional quality scores for Indian dishes. Given 4 nutritional inputs (Calories, Protein, Carbohydrates, Sugar), the model predicts a score (0–100) and returns the top 2 most similar dishes from a dataset of **1,014 Indian dishes**.
 
-### 1. Train the Model
+**Use cases:**
+- Predict nutritional quality of a new dish
+- Find similar healthy alternatives
+- Compare nutritional profiles
+- Explore Indian cuisine nutrition
 
-```bash
-python main.py
+---
+
+## ✨ Features
+
+### Model
+- ✅ **Linear Regression** trained on 1,014 Indian dishes
+- ✅ **82.5% accuracy** (Test R² = 0.8252)
+- ✅ Weighted nutritional scoring formula
+- ✅ Model persistence (joblib)
+
+### Web UI
+- ✅ **Professional dark theme** with glassmorphism design
+- ✅ **Animated meter** showing predicted nutritional score
+- ✅ **Top 2 matching dishes** with similarity metrics
+- ✅ **Responsive grid layout** (desktop & mobile)
+- ✅ **Real-time predictions** via Flask API
+
+### API
+- ✅ `POST /api/predict` — Predict score + find matches
+- ✅ `GET /api/search` — Search dishes by name
+- ✅ CORS enabled for cross-origin requests
+- ✅ Single Flask process serves both frontend & API
+
+---
+
+## 🛠 Tech Stack
+
+| Component | Technology |
+|-----------|-----------|
+| **Backend** | Python 3.11+, Flask 3.1+, Flask-CORS |
+| **ML** | scikit-learn, pandas, numpy, joblib |
+| **Frontend** | HTML5, CSS3, JavaScript (vanilla) |
+| **Visualization** | matplotlib, seaborn |
+| **Dataset** | CSV (1,014 Indian dishes) |
+
+---
+
+## 📂 Project Structure
+
+```
+nutrition_regression_project/
+├── Indian_Food_Nutrition_Processed.csv    # Dataset (1,014 dishes)
+├── config.py                              # Configuration (paths, features)
+├── data_loader.py                         # DataLoader class
+├── model_trainer.py                       # ModelTrainer class
+├── main.py                                # Training script
+├── app.py                                 # CLI prediction app
+├── server.py                              # Flask API + frontend server
+├── requirements.txt                       # Python dependencies
+├── models/                                # Trained artifacts
+│   ├── linear_regression_model.joblib
+│   ├── scaler.joblib
+│   ├── features.joblib
+│   └── dishes.joblib
+├── frontend/                              # Web UI
+│   ├── index.html                         # Main page
+│   ├── styles.css                         # Modern styling
+│   ├── script.js                          # Frontend logic
+│   └── README.md                          # Frontend notes
+├── Indian_Food_Nutrition_Prediction.ipynb # Jupyter Notebook (Colab)
+└── README.md                              # This file
 ```
 
-This will:
-- Load the dataset
-- Calculate nutritional scores for all dishes
-- Train a Linear Regression model
-- Save model, scaler, and features
+---
 
-### 2. Use the Prediction App
+## 🔧 Installation
+
+### Prerequisites
+- Python 3.11+
+- pip or uv package manager
+- Git
+
+### Steps
+
+1. **Clone repository**:
+   ```bash
+   git clone <repo-url>
+   cd nutrition_regression_project
+   ```
+
+2. **Create virtual environment**:
+   ```bash
+   python -m venv venv
+   # Windows
+   .\venv\Scripts\Activate.ps1
+   # macOS/Linux
+   source venv/bin/activate
+   ```
+
+3. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   # or with uv
+   uv pip install -r requirements.txt
+   ```
+
+---
+
+## 🚀 Usage
+
+### Option 1: Web UI (Recommended) ⭐
+
+Start the Flask server (serves both API & frontend):
+
+```bash
+python server.py
+```
+
+Open browser: **http://127.0.0.1:5000**
+
+**Features:**
+- Enter Calories, Protein, Carbs, Sugar
+- Click "Predict" → instant score + top 2 matches
+- Animated meter shows score 0–100
+- Match cards show similar dishes
+
+### Option 2: CLI App
+
+Interactive command-line interface:
 
 ```bash
 python app.py
 ```
 
-The app provides:
-- Manual entry of nutritional values
-- Search for similar dishes in dataset
-- Real-time score prediction and interpretation
+**Menu options:**
+1. Enter nutritional values manually
+2. Search for dish in dataset
+3. Exit
 
-## 📁 Project Structure
+### Option 3: Jupyter Notebook (Google Colab)
 
-```
-nutrition_regression_project/
-├── Indian_Food_Nutrition_Processed.csv   # Dataset (1,014 dishes)
-├── config.py                             # Configuration settings
-├── data_loader.py                        # Data loading and scoring
-├── model_trainer.py                      # Model training
-├── main.py                               # Training script
-├── app.py                                # Interactive prediction app
-├── requirements.txt                      # Dependencies
-├── models/                               # Trained models (auto-created)
-│   ├── linear_regression_model.joblib   # Trained model
-│   ├── scaler.joblib                    # Feature scaler
-│   ├── features.joblib                  # Feature names
-│   └── dishes.joblib                    # Training dishes
-└── outputs/                              # Generated files (auto-created)
-```
+Run in Google Colab:
 
-## 💻 Usage Examples
-
-### Example 1: Manually enter values
-```
-Enter nutritional values for the dish:
-
-Calories (kcal): 200
-Protein (g): 15
-Carbohydrates (g): 25
-Free Sugar (g): 5
-
-🎯 Predicted Score: 67.80/100
-📈 Rating: Good 👍
-```
-
-### Example 2: Search for similar dishes
-```
-Search for a similar dish in dataset:
-Enter dish name to search: chicken
-
-📋 Found 3 similar dish(es):
-  • Chicken sandwich
-  • Lemon chicken
-  • Chicken tikka
-```
-
-## 📊 Model Performance
-
-Typical model performance:
-- **Train R² Score**: ~0.84 (84% variance explained)
-- **Test R² Score**: ~0.85 (85% variance explained)
-- **Test RMSE**: ~4.28 (average prediction error)
-- **Test MAE**: ~3.36 (mean absolute error)
-
-## 🔧 Requirements
-
-- Python 3.8+
-- pandas
-- numpy
-- scikit-learn
-- joblib
-
-Install with:
 ```bash
-pip install -r requirements.txt
+# File: Indian_Food_Nutrition_Prediction.ipynb
+# Upload to Colab and run cells sequentially
 ```
 
-## 📝 Files Description
+**Features:**
+- Step-by-step EDA & training
+- Dataset upload (Colab file picker)
+- Model training with visualizations
+- Interactive predictions
 
-### config.py
-Centralized configuration including:
-- Directory paths
-- Feature columns
-- Model file locations
+### Option 4: Training Only
 
-### data_loader.py
-- `DataLoader` class
-- Load CSV dataset
-- Calculate nutritional scores
-- Prepare features and target
+Train a fresh model:
 
-### model_trainer.py
-- `ModelTrainer` class
-- Split and scale data
-- Train Linear Regression
-- Calculate metrics
-- Save trained model
+```bash
+python main.py
+```
 
-### main.py
-- Training orchestration script
-- Loads data
-- Trains model
-- Saves artifacts
-
-### app.py
-- Interactive prediction app
-- User input handling
-- Real-time predictions
-- Dish searching
-
-## 🎓 Course Project Integration
-
-This project is designed for:
-- Machine Learning course projects
-- Data science demonstrations
-- Regression model practice
-- Model deployment examples
-
-## 📈 Future Enhancements
-
-Potential improvements:
-- Multiple regression models comparison
-- Hyperparameter tuning
-- Cross-validation
-- Feature importance analysis
-- Web API deployment
-- Batch predictions
-- Database integration
-
-## 🤝 Contributing
-
-To extend this project:
-1. Modify `data_loader.py` for different scoring systems
-2. Update `model_trainer.py` for different models
-3. Enhance `app.py` with new features
-4. Add visualization capabilities
-
-## 📄 License
-
-This project is for educational purposes.
+**Output:** Trained model files in `models/`
 
 ---
 
-**Created**: October 2025
-**Last Updated**: October 26, 2025
+## 📊 Model Performance
+
+### Training Results
+
+| Metric | Train | Test |
+|--------|-------|------|
+| **R² Score** | 0.8099 (80.99%) | 0.8252 (82.52%) ⭐ |
+| **RMSE** | 4.9117 | 4.6388 |
+| **MAE** | 3.6232 | 3.6323 |
+| **Samples** | 811 | 203 |
+
+### Feature Importance (Coefficients)
+
+| Feature | Coefficient | Impact |
+|---------|-------------|--------|
+| Carbohydrates (g) | +5.7302 | ↑ Positive |
+| Protein (g) | +5.6154 | ↑ Positive |
+| Free Sugar (g) | -5.7391 | ↓ Negative |
+| Calories (kcal) | -7.0194 | ↓ Negative |
+
+### Nutritional Score Categories
+
+| Range | Category | Rating |
+|-------|----------|--------|
+| 80–100 | Excellent | 🌟 |
+| 70–79 | Very Good | ✅ |
+| 60–69 | Good | 👍 |
+| 50–59 | Fair | ⚖️ |
+| 40–49 | Poor | ⚠️ |
+| 0–39 | Very Poor | ❌ |
+
+---
+
+## 🎯 Scoring System
+
+The nutritional score is calculated using a **weighted formula**:
+
+- **Protein (35%)**: Higher is better (scale: 0-20g)
+- **Calories (25%)**: Lower is better (scale: 0-500 kcal)
+- **Carbohydrates (25%)**: Optimal 30-50g range
+- **Sugar (15%)**: Lower is better (scale: 0-15g)
+
+**Formula:**
+```
+score = (protein_score × 0.35) + (calorie_score × 0.25) + 
+        (carb_score × 0.25) + (sugar_score × 0.15)
+```
+
+---
+
+## 🔌 API Documentation
+
+### Predict Score
+
+**Endpoint:** `POST /api/predict`
+
+**Request:**
+```json
+{
+  "calories": 280,
+  "protein": 25,
+  "carbs": 30,
+  "sugar": 10
+}
+```
+
+**Response:**
+```json
+{
+  "score": 78.31,
+  "category": "Very Good",
+  "matches": [
+    {
+      "Dish Name": "Moong Bean Dosa",
+      "Calories (kcal)": 275,
+      "Protein (g)": 26,
+      "Carbohydrates (g)": 28,
+      "Free Sugar (g)": 9,
+      "Nutritional_Score": 75.2
+    },
+    {
+      "Dish Name": "Chicken Walnut Sandwich",
+      "Calories (kcal)": 285,
+      "Protein (g)": 24,
+      "Carbohydrates (g)": 32,
+      "Free Sugar (g)": 11,
+      "Nutritional_Score": 76.8
+    }
+  ]
+}
+```
+
+### Search Dishes
+
+**Endpoint:** `GET /api/search?q=dosa`
+
+**Response:**
+```json
+{
+  "results": [
+    {
+      "Dish Name": "Moong Bean Dosa",
+      "Nutritional_Score": 75.2
+    },
+    {
+      "Dish Name": "Masala Dosa",
+      "Nutritional_Score": 62.1
+    }
+  ]
+}
+```
+
+---
+
+## 🌐 Deployment
+
+### Local Development
+
+```bash
+python server.py
+# Visit http://127.0.0.1:5000
+```
+
+### Production (with Gunicorn)
+
+```bash
+pip install gunicorn
+gunicorn -w 4 -b 0.0.0.0:5000 server:app
+```
+
+### Docker
+
+**Dockerfile:**
+```dockerfile
+FROM python:3.11-slim
+WORKDIR /app
+COPY . .
+RUN pip install -r requirements.txt
+CMD ["python", "server.py"]
+```
+
+**Build & run:**
+```bash
+docker build -t nutrition-predictor .
+docker run -p 5000:5000 nutrition-predictor
+```
+
+### Cloud Deployment (Heroku, Railway, Render)
+
+1. Push to GitHub
+2. Connect repository
+3. Set buildpack to Python
+4. Deploy
+
+**Procfile:**
+```
+web: gunicorn -w 1 -t 120 server:app
+```
+
+---
+
+## 📚 Documentation Files
+
+- **`FINAL_PROJECT_SUMMARY.md`** — Complete project overview
+- **`COMPLETE_GUIDE.md`** — Detailed user guide with examples
+- **`frontend/README.md`** — Frontend setup notes
+- **`Indian_Food_Nutrition_Prediction.ipynb`** — Jupyter Notebook for Colab
+
+---
+
+## 🎓 Learning Outcomes
+
+This project demonstrates:
+- ✅ Data loading & preprocessing (pandas)
+- ✅ Feature engineering (weighted scoring formula)
+- ✅ Train/test split & scaling (scikit-learn)
+- ✅ Model training & evaluation (Linear Regression)
+- ✅ Model persistence (joblib)
+- ✅ REST API design (Flask)
+- ✅ Frontend-backend integration (fetch API)
+- ✅ Responsive UI/UX (HTML/CSS/JS)
+- ✅ Similarity matching (Euclidean distance)
+
+---
+
+## 📦 Dataset
+
+**Source:** Indian Food Nutrition (1,014 dishes)
+
+**Columns:** 12 nutritional features
+- Dish Name
+- Calories (kcal)
+- Protein (g)
+- Carbohydrates (g)
+- Fat (g)
+- Fiber (g)
+- Free Sugar (g)
+- Salt (g)
+- Saturated Fat (g)
+- Trans Fat (g)
+- Cholesterol (mg)
+- Iron (mg)
+
+---
+
+## 🤝 Contributing
+
+Contributions welcome! Areas to improve:
+- [ ] Add more dish categories
+- [ ] Implement k-NN for better matching
+- [ ] Add user authentication
+- [ ] Deploy to cloud
+- [ ] Mobile app (React Native)
+- [ ] Advanced visualizations
+
+---
+
+## ✅ Checklist
+
+- [x] Data loading & exploration
+- [x] Nutritional score calculation
+- [x] Linear Regression model training
+- [x] Model evaluation & metrics
+- [x] Model persistence (joblib)
+- [x] CLI prediction app
+- [x] REST API (Flask + CORS)
+- [x] Professional web UI (HTML/CSS/JS)
+- [x] Animated components & responsive design
+- [x] Dish matching algorithm (Euclidean distance)
+- [x] Jupyter Notebook (Colab-ready)
+- [x] Comprehensive documentation
+- [x] Git repository
+
+---
+
+**🚀 Ready to predict!** Start with: `python server.py` → http://127.0.0.1:5000
